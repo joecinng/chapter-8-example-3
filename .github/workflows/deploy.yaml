@@ -4,9 +4,10 @@
 # Automatically deploys the Node.js microservice to Kubernetes on push to any branch. 
 # For real use you might want to restrict this to the "prod" branch.
 #
-
+# define the name of our workflow
 name: Deploy microservice
 
+# define triggers for the workflow, with push and manually triggering
 on:
   #
   # Deploys the microservice on push to the main branch of this code repository.
@@ -20,11 +21,14 @@ on:
   #
   workflow_dispatch: 
 
+# define one job for the workflow
 jobs:
 
+  # define the os for the job to run on
   deploy:
     runs-on: ubuntu-latest
     
+    # define the environment variables for the job
     env:
       VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
@@ -52,7 +56,7 @@ jobs:
       # Installs Kubectl and connects it to the cluster.
       #
       # https://github.com/marketplace/actions/kubernetes-cli-kubectl
-      #
+      # use the created image
       - uses: tale/kubectl-action@v1
         with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
